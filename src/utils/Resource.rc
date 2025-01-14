@@ -1,0 +1,4 @@
+#include "Resource.h"
+
+IDI_ICON1 ICON "../assets/icon/volcano.ico"
+

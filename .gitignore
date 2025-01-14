@@ -1,0 +1,10 @@
+# Binaries
+build/
+.vs/
+
+# Others
+*.DS_Store
+*.Identifier
+*.user
+*.suo
+*.ini
