@@ -8,8 +8,7 @@
 #include "../memory/Offsets.h"
 #include "../render/Render.h"
 
-class GameState {
-public:
+struct GameState {
     uintptr_t localPlayer;
     ViewMatrix viewMatrix;
     uintptr_t entityList;
@@ -20,6 +19,7 @@ class DLLAddresses {
 public:
     const uintptr_t client;
     const uintptr_t engine;
+public:
     DLLAddresses(Memory& memory)
         : client(memory.GetModuleAddress(L"client.dll")), engine(memory.GetModuleAddress(L"engine2.dll")) {}
 };

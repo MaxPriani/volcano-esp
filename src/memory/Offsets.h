@@ -17,7 +17,7 @@ namespace offsets {
 	}
 
 	namespace engine2_dll {
-		constexpr std::ptrdiff_t dwWindowWidth = 0x61D398;
-		constexpr std::ptrdiff_t dwWindowHeight = 0x61D39C;
+		constexpr std::ptrdiff_t dwWindowWidth = 0x61D384;
+		constexpr std::ptrdiff_t dwWindowHeight = 0x61D380;
 	}
 }
