@@ -81,34 +81,6 @@ void Render::InitializeOverlayWindow(HINSTANCE instance) {
     SetLayeredWindowAttributes(dxResources.window, RGB(0, 0, 0), 255, LWA_COLORKEY);
 }
 
-void Render::UpdateOverlayResolution(int newX, int newY) {
-    resX = newX;
-    resY = newY;
-
-    if (dxResources.window) {
-        SetWindowPos(
-            dxResources.window,
-            nullptr,
-            0, 0,
-            resX, resY,
-            SWP_NOMOVE |
-            SWP_NOZORDER
-        );
-    }
-
-    if (dxResources.swapChain) {
-        DXGI_SWAP_CHAIN_DESC desc;
-        dxResources.swapChain->GetDesc(&desc);
-        dxResources.swapChain->ResizeBuffers(
-            desc.BufferCount,
-            resX,
-            resY,
-            desc.BufferDesc.Format,
-            desc.Flags
-        );
-    }
-}
-
 void Render::Present() {
     const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
     dxResources.context->OMSetRenderTargets(1, &dxResources.renderTargetView, nullptr);
