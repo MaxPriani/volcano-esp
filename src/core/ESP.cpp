@@ -5,11 +5,8 @@ ESP::ESP(Memory& mem, Render* render, Config* config) :
     render(render),
     config(config),
     dllAddresses(mem),
-    resX(0),
-    resY(0) {
-    resX = memory.Read<int>(dllAddresses.engine + offsets::engine2_dll::dwWindowWidth);
-    resY = memory.Read<int>(dllAddresses.engine + offsets::engine2_dll::dwWindowHeight);
-}
+    resX(memory.Read<int>(dllAddresses.engine + offsets::engine2_dll::dwWindowWidth)),
+    resY(memory.Read<int>(dllAddresses.engine + offsets::engine2_dll::dwWindowHeight)) {}
 
 void ESP::UpdateGameState() {
     gameState.localPlayer = memory.Read<uintptr_t>(dllAddresses.client + offsets::client_dll::dwLocalPlayerPawn);

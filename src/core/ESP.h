@@ -26,16 +26,16 @@ public:
 
 class ESP {
 public:
-    bool uiActivated = true;
+    Memory& memory;
+    Render* render;
+    Config* config;
+    DLLAddresses dllAddresses;
     int resX;
     int resY;
-    Memory& memory;
-    DLLAddresses dllAddresses;
     GameState gameState;
-    Config* config;
-    Render* render;
+    Player player;
+    bool uiActivated = true;
     ESP(Memory& mem, Render* render, Config* config);
-
 public:
     void RenderESP();
     void DrawESPBox(const ImVec2& playerScreenPos, const ImVec2& playerScreenHead, ImU32 color);
