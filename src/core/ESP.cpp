@@ -127,7 +127,7 @@ void ESP::RenderESP() {
 
     UpdateGameState();
 
-    for (int i = 0; i < 64; i++) {
+    for (int i = 2; i <= 32; i++) {
 
         const auto listEntry = memory.Read<uintptr_t>(gameState.entityList + (8 * (i & 0x7FFF) >> 9) + 16);
         if (!listEntry) continue;
