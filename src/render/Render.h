@@ -4,7 +4,6 @@
 #include "../utils/Resource.h"
 
 class ESP;
-class DLLAddresses;
 
 class DXResources {
 public:
@@ -17,20 +16,19 @@ public:
 
 class Render {
 public:
-    int resX;
-    int resY;
-    DXResources dxResources;
     Config& config;
-    DLLAddresses& dllAddresses;
-    explicit Render(Config& cfg, DLLAddresses& dll, int width, int height) : config(cfg), dllAddresses(dll), resX(width), resY(height) {}
+    DXResources dxResources;
 public:
-    void InitializeDirectX();
+    Render(Config& cfg);
+    void InitializeDirectX(ESP& esp);
     void ReleaseResources();
     void Present();
     void RenderUI();
-    void InitializeUI(HINSTANCE instance);
-    void InitializeOverlayWindow(HINSTANCE instance);
-    void UpdateOverlayResolution(int newX, int newY);
+    void MainTab();
+    void ESPRangeTab();
+    void HUDTab();
+    void InitializeUI(HINSTANCE instance, ESP& esp);
+    void InitializeOverlayWindow(HINSTANCE instance, ESP& esp);
     HWND GetOverlayWindow() const;
     static LRESULT CALLBACK HandleMessage(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 };

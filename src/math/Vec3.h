@@ -8,7 +8,7 @@ public:
     float x, y, z;
 
 public:
-    constexpr Vector3(float x = 0.f, float y = 0.f, float z = 0.f) noexcept : x(x), y(y), z(z) {}
+    constexpr Vector3(float x = 0.f, float y = 0.f, float z = 0.f) noexcept;
     Vector3 operator-(const Vector3& other) const noexcept;
     Vector3 operator+(const Vector3& other) const noexcept;
     Vector3 operator*(float factor) const noexcept;

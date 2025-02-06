@@ -1,12 +1,16 @@
 #include "Render.h"
+#include "../core/ESP.h"
 
-void Render::InitializeDirectX() {
+Render::Render(Config& cfg) :
+    config(cfg) {}
+
+void Render::InitializeDirectX(ESP& esp) {
 
     DXGI_SWAP_CHAIN_DESC swapChainDescription = {
     .BufferDesc = {
-        .Width = static_cast<UINT>(resX),
-        .Height = static_cast<UINT>(resY),
-        .RefreshRate = {60, 1},
+        .Width = static_cast<UINT>(esp.resX),
+        .Height = static_cast<UINT>(esp.resY),
+        .RefreshRate = {144, 1},
         .Format = DXGI_FORMAT_R8G8B8A8_UNORM
     },
     .SampleDesc = {1, 0},
@@ -28,7 +32,7 @@ void Render::InitializeDirectX() {
     ID3D11Texture2D* backBuffer = nullptr;
     dxResources.swapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
 
-    if (backBuffer != nullptr) {
+    if (backBuffer) {
         dxResources.device->CreateRenderTargetView(backBuffer, nullptr, &dxResources.renderTargetView);
         backBuffer->Release();
     }
@@ -36,11 +40,10 @@ void Render::InitializeDirectX() {
 }
 
 void Render::ReleaseResources() {
-    if (dxResources.renderTargetView) dxResources.renderTargetView->Release();
-    if (dxResources.swapChain) dxResources.swapChain->Release();
-    if (dxResources.context) dxResources.context->Release();
     if (dxResources.device) dxResources.device->Release();
-    if (dxResources.window) DestroyWindow(dxResources.window);
+    if (dxResources.context) dxResources.context->Release();
+    if (dxResources.swapChain) dxResources.swapChain->Release();
+    if (dxResources.renderTargetView) dxResources.renderTargetView->Release();
 }
 
 LRESULT CALLBACK Render::HandleMessage(HWND window, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -54,7 +57,7 @@ LRESULT CALLBACK Render::HandleMessage(HWND window, UINT message, WPARAM wParam,
     return DefWindowProc(window, message, wParam, lParam);
 }
 
-void Render::InitializeOverlayWindow(HINSTANCE instance) {
+void Render::InitializeOverlayWindow(HINSTANCE instance, ESP& esp) {
 
     WNDCLASSEXW wc = {};
     wc.cbSize = sizeof(WNDCLASSEXW);
@@ -72,7 +75,7 @@ void Render::InitializeOverlayWindow(HINSTANCE instance) {
         wc.lpszClassName,
         L"ESP",
         WS_POPUP,
-        0, 0, resX, resY,
+        0, 0, esp.resX, esp.resY,
         nullptr, nullptr,
         instance, nullptr
     );
@@ -93,56 +96,67 @@ HWND Render::GetOverlayWindow() const {
     return dxResources.window;
 }
 
-void Render::InitializeUI(HINSTANCE instance) {
-    InitializeOverlayWindow(instance);
-    InitializeDirectX();
+void Render::InitializeUI(HINSTANCE instance, ESP& esp) {
+
+    InitializeOverlayWindow(instance, esp);
+    InitializeDirectX(esp);
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
     ImGui_ImplWin32_Init(dxResources.window);
     ImGui_ImplDX11_Init(dxResources.device, dxResources.context);
+
 }
 
-void Render::RenderUI() {
+void Render::RenderUI() {       
+
     ImGui::SetNextWindowSize(ImVec2(380, 220), ImGuiCond_Always);
     if (ImGui::Begin("Settings |         Volcano's ESP         | by flosur", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) {
         if (ImGui::BeginTabBar("##ESPTabs")) {
-
-
-            if (ImGui::BeginTabItem("Main")) {
-                ImGui::Checkbox("Enable ESP", &config.enabledESP);
-                ImGui::Checkbox("Enable Distance", &config.enableDistance);
-                ImGui::SliderFloat("Max Enemy Distance", &config.maxEnemyDistance, 300.0f, 6000.0f, "%.1f");
-                ImGui::SliderFloat("Box Thickness", &config.boxThickness, 1.0f, 2.0f, "%.1f");
-                ImGui::SliderFloat("Box Roudness", &config.boxRoundness, 0.0f, 25.0f, "%.1f");
-                ImGui::EndTabItem();
-            }
-
-            if (ImGui::BeginTabItem("HUD")) {
-                ImGui::Checkbox("Show Teammates", &config.showLocalTeam);
-                ImGui::Checkbox("Show Team Health", &config.showTeamHealth);
-                ImGui::Checkbox("Show Enemy Health", &config.showEnemyHealth);
-                ImGui::Checkbox("Show Player Names", &config.showPlayerNames);
-                ImGui::SliderFloat("Health Text Size", &config.healthTextSize, 15.0f, 25.0f, "%.1f");
-                ImGui::SliderFloat("Player Names Text Size", &config.playerNamesTextSize, 15.0f, 25.0f, "%.1f");
-                ImGui::SliderFloat("Distance Text Size", &config.distanceTextSize, 15.0f, 25.0f, "%.1f");
-                ImGui::EndTabItem();
-            }
-
-            if (ImGui::BeginTabItem("Colors")) {
-                ImGui::ColorEdit4("Team Box", (float*)&config.teamColor);
-                ImGui::ColorEdit4("Enemy Box", (float*)&config.enemyColor);
-                ImGui::ColorEdit4("Distance Text", (float*)&config.distanceTextColor);
-                ImGui::ColorEdit4("Player Names", (float*)&config.playerNamesTextColor);
-                ImGui::EndTabItem();
-            }
-
-            if (ImGui::BeginTabItem("HotKeys")) {
-                ImGui::Text("[F4] - enable/disable UI");
-                ImGui::EndTabItem();
-            }
+            MainTab();
+            ESPRangeTab();
+            HUDTab();
             ImGui::EndTabBar();
         }
         ImGui::End();
     }
 }
+
+void Render::MainTab() {
+
+    if (ImGui::BeginTabItem("ESP")) {
+        ImGui::Checkbox("Enable ESP", &config.enabledESP);
+        ImGui::Checkbox("Enable HP-based Color", &config.enableHealthBased);
+        ImGui::SliderFloat("Box Thickness", &config.boxThickness, 1.0f, 5.0f, "%.1f");
+        ImGui::SliderFloat("Box Roudness", &config.boxRoundness, 0.0f, 100.0f, "%.1f");
+        ImGui::ColorEdit4("Team Box", reinterpret_cast<float*>(&config.teamColor));
+        ImGui::ColorEdit4("Enemy Box", reinterpret_cast<float*>(&config.enemyColor));
+        ImGui::EndTabItem();
+    }
+}
+
+void Render::ESPRangeTab() {
+
+    if (ImGui::BeginTabItem("Range")) {
+        ImGui::Checkbox("Enable Distance Limit", &config.enableDistance);
+        ImGui::SliderFloat("Max Enemy Distance", &config.maxEnemyDistance, 300.0f, 6000.0f, "%.1f");
+        ImGui::SliderFloat("Distance Text Size", &config.distanceTextSize, 15.0f, 25.0f, "%.1f");
+        ImGui::ColorEdit4("Distance Text Color", reinterpret_cast<float*>(&config.distanceTextColor));
+        ImGui::EndTabItem();
+    }
+}
+
+void Render::HUDTab() {
+
+    if (ImGui::BeginTabItem("HUD")) {
+        ImGui::Checkbox("Show Teammates", &config.showLocalTeam);
+        ImGui::Checkbox("Show Player Names", &config.showPlayerNames);
+        ImGui::Checkbox("Show Health", &config.showHealth);
+        ImGui::SliderFloat("Health Text Size", &config.healthTextSize, 15.0f, 25.0f, "%.1f");
+        ImGui::SliderFloat("Player Names Text Size", &config.playerNamesTextSize, 15.0f, 25.0f, "%.1f");
+        ImGui::ColorEdit4("Player Names Color", reinterpret_cast<float*>(&config.playerNamesTextColor));
+        ImGui::EndTabItem();
+    }
+
+}
+
 

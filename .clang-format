@@ -1,0 +1,16 @@
+BasedOnStyle: LLVM
+IndentWidth: 4        
+ColumnLimit: 0     
+BreakBeforeBraces: Attach 
+AllowShortIfStatementsOnASingleLine: false 
+IndentCaseLabels: true 
+SpaceBeforeParens: ControlStatements 
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+IndentPPDirectives: AfterHash
+NamespaceIndentation: All
+
+
+
+
+
