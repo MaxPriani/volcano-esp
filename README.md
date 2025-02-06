@@ -26,11 +26,11 @@ Using `Process Explorer`, I analyzed which processes typically hold handles to `
 
 ### How It Works
 
-- Scan existing handles: The program uses `NtQuerySystemInformation` to list all open handles in the system.
-- Filter handles from `steam.exe`: It identifies handles belonging to `steam.exe` that reference `CS2.exe`.
-- Check permissions: Only handles with `PROCESS_VM_READ | PROCESS_QUERY_INFORMATION` are considered.
-- Duplicate the handle: If a valid handle is found, `NtDuplicateObject` is used to create a copy that `ESP.exe` can use to read CS2 memory.
-- Memory reading: The ESP now has full read access to CS2 memory without ever calling `OpenProcess`.
+- **Scan existing handles**: The program uses `NtQuerySystemInformation` to list all open handles in the system.
+- **Filter handles from `steam.exe`**: It identifies handles belonging to `steam.exe` that reference `CS2.exe`.
+- **Check permissions**: Only handles with `PROCESS_VM_READ | PROCESS_QUERY_INFORMATION` are considered.
+- **Duplicate the handle**: If a valid handle is found, `NtDuplicateObject` is used to create a copy that `ESP.exe` can use to read CS2 memory.
+- **Memory reading**: The ESP now has full read access to CS2 memory without ever calling `OpenProcess`.
 
 ## **Requirements**
 
