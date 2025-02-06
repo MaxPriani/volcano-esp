@@ -1,4 +1,4 @@
-# 🌋 **Volcano's ESP** 🔥
+# 🌋 **Volcano's ESP**
 
 ## **Showcase - Screenshots**
 
