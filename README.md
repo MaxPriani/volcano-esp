@@ -24,7 +24,7 @@ Instead of using `OpenProcess` to obtain a handle to `CS2.exe`, which is commonl
 
 Using `Process Explorer`, I analyzed which processes typically hold handles to `CS2.exe` and discovered that `steam.exe` consistently opens handles with the required permissions. The ESP duplicates an existing handle from `steam.exe`, effectively bypassing the need to call `OpenProcess` on `CS2.exe`.
 
-### How It Works
+### 💡 **How It Works**
 
 - **Scan existing handles**: The program uses `NtQuerySystemInformation` to list all open handles in the system.
 - **Filter handles from `steam.exe`**: It identifies handles belonging to `steam.exe` that reference `CS2.exe`.
@@ -32,7 +32,7 @@ Using `Process Explorer`, I analyzed which processes typically hold handles to `
 - **Duplicate the handle**: If a valid handle is found, `NtDuplicateObject` is used to create a copy that `ESP.exe` can use to read CS2 memory.
 - **Memory reading**: The ESP now has full read access to CS2 memory without ever calling `OpenProcess`.
 
-## 💡 **Requirements**
+## 📃 **Requirements**
 
 To run this project on your machine, ensure that you have the following requirements:
 
