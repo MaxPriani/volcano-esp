@@ -1,6 +1,6 @@
-# 🌋 **Volcano's ESP**
+# 🌋 **Volcano's ESP** 
 
-## **Showcase - Screenshots**
+## 📸 **Showcase - Screenshots**
 
 ![ESP](https://github.com/MaxPriani/volcano-esp/blob/main/src/assets/images/1.png?raw=true)
 
@@ -8,17 +8,17 @@
 
 ![ESP](https://github.com/MaxPriani/volcano-esp/blob/main/src/assets/images/3.png?raw=true)
 
-## **Project Description**
+## 📜 **Project Description**
 
 **Volcano's ESP** is a personal project developed to learn and deepen knowledge in **C++**, **reverse engineering**, and **memory manipulation** by accessing CS2 data through external memory reading.
 
-## **Features**
+## 🎖️ **Features**
 
 - **Handle Hijacking** for undetected memory reading.
 - **ESP Overlay** with player boxes, health-based colors, and distance display.
 - **ImGui UI** for real-time customization.
 
-## **Handle Hijacking**
+## 💎 **Handle Hijacking**
 
 Instead of using `OpenProcess` to obtain a handle to `CS2.exe`, which is commonly flagged by anti-cheats like VAC, Volcano's ESP hijacks a handle that another process—`steam.exe`—has already opened to `CS2.exe`.
 
@@ -32,7 +32,7 @@ Using `Process Explorer`, I analyzed which processes typically hold handles to `
 - **Duplicate the handle**: If a valid handle is found, `NtDuplicateObject` is used to create a copy that `ESP.exe` can use to read CS2 memory.
 - **Memory reading**: The ESP now has full read access to CS2 memory without ever calling `OpenProcess`.
 
-## **Requirements**
+## 💡 **Requirements**
 
 To run this project on your machine, ensure that you have the following requirements:
 
@@ -42,7 +42,7 @@ To run this project on your machine, ensure that you have the following requirem
 - **DirectX 11 SDK** for rendering interfaces.
 - **CMake** (if you prefer to use it for build management, you will need to create your own `CMakeLists.txt`).
 
-## **Building in Visual Studio**
+## ⚙️ **Building in Visual Studio**
 
 1. **Clone the repository** to your local machine:
    ```bash
