@@ -1,6 +1,6 @@
 # 🌋 **Volcano's ESP** 
 
-## 📸 **Showcase - Screenshots**
+## 📸🌄 **Showcase**
 
 ![ESP](https://github.com/MaxPriani/volcano-esp/blob/main/src/assets/images/1.png?raw=true)
 
