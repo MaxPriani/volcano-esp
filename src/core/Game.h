@@ -12,11 +12,7 @@ public:
 	int localTeam;
 
 public:
-
-	GameState(Memory& mem) :
-		memory(mem) {
-	}
-
+	GameState(Memory& mem) : memory(mem) {}
 	uintptr_t GetClientDLL();
 	uintptr_t GetEngineDLL();
 	ViewMatrix GetViewMatrix();

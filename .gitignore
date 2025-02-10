@@ -3,6 +3,7 @@ build/
 .vs/
 
 # Others
+ESP/
 *.DS_Store
 *.Identifier
 *.user

@@ -106,7 +106,6 @@ HANDLE Memory::GetHijackedHandle(DWORD targetPID) {
     }
 
     auto steamPID = GetPID(L"steam.exe");
-
     for (ULONG i = 0; i < allHandlesInfo->HandleCount; ++i) {
 
         const auto& handle = allHandlesInfo->Handles[i];
@@ -159,9 +158,7 @@ HANDLE Memory::GetHijackedHandle(DWORD targetPID) {
         }
 
         CloseHandle(hDuplicated);
-
         continue;
-
     }
 
     return nullptr;
